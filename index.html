@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>HYPERSENSEINDIA • Reseller</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root{--bg:#070b12;--bg2:#0d1420;--card:#111a29;--line:#1c2839;--txt:#e6f1ff;
+    --dim:#7c8da3;--acc:#00e5a0;--danger:#ff4d6d;--warn:#ffb020;--res:#8a9bff}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Inter,system-ui,sans-serif}
+  body{background:var(--bg);color:var(--txt);min-height:100vh}
+  .hidden{display:none!important}
+
+  #loginView{display:flex;align-items:center;justify-content:center;min-height:100vh;
+    background:radial-gradient(circle at 50% 0%,#141a3a 0%,#070b12 60%)}
+  .loginBox{width:400px;background:var(--card);border:1px solid var(--line);
+    border-radius:18px;padding:38px 32px;box-shadow:0 20px 60px rgba(138,155,255,.10)}
+  .logo{width:70px;height:70px;border-radius:50%;
+    background:conic-gradient(from 180deg,#8a9bff,#5865F2,#0d1420,#8a9bff);
+    display:flex;align-items:center;justify-content:center;margin:0 auto 14px;
+    font-weight:800;color:#0a0f1c;font-size:22px}
+  h1{font-size:22px;text-align:center;letter-spacing:2px}
+  .sub{text-align:center;color:var(--res);font-size:11px;letter-spacing:3px;margin-bottom:26px}
+
+  label{display:block;font-size:12px;color:var(--dim);margin:14px 0 6px;letter-spacing:1px}
+  input,select,textarea{width:100%;padding:11px 14px;background:var(--bg2);
+    border:1px solid var(--line);border-radius:10px;color:var(--txt);font-size:14px;
+    outline:none;transition:.2s;font-family:inherit}
+  input:focus,select:focus,textarea:focus{border-color:var(--res)}
+  textarea{resize:vertical;min-height:70px}
+  button{cursor:pointer;border:none;border-radius:10px;font-weight:600;transition:.2s}
+  .btn{width:100%;padding:12px;background:linear-gradient(135deg,var(--res),#5865F2);
+    color:#0a0f1c;font-size:14px;margin-top:22px;letter-spacing:1px}
+  .btn:hover{filter:brightness(1.08)}
+  .err{color:var(--danger);font-size:12px;text-align:center;margin-top:12px;min-height:16px}
+  .ok{color:var(--acc);font-size:12px;text-align:center;margin-top:12px;min-height:16px}
+
+  #dash{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+  .side{background:var(--bg2);border-right:1px solid var(--line);padding:22px 16px}
+  .brand{display:flex;align-items:center;gap:10px;margin-bottom:26px}
+  .brand .dot{width:34px;height:34px;border-radius:50%;
+    background:conic-gradient(from 180deg,#8a9bff,#5865F2,#0d1420,#8a9bff);
+    display:flex;align-items:center;justify-content:center;font-size:11px;
+    font-weight:800;color:#0a0f1c}
+  .brand b{font-size:13px;letter-spacing:1px}
+  .brand span{display:block;font-size:9px;color:var(--res);letter-spacing:2px}
+  .nav{display:flex;flex-direction:column;gap:6px}
+  .nav a{padding:11px 14px;border-radius:10px;color:var(--dim);text-decoration:none;
+    font-size:13px;transition:.2s;cursor:pointer}
+  .nav a:hover{background:var(--card);color:var(--txt)}
+  .nav a.active{background:linear-gradient(135deg,rgba(138,155,255,.18),rgba(88,101,242,.08));
+    color:var(--res);border-left:3px solid var(--res)}
+  .nav .section{font-size:9px;color:var(--dim);letter-spacing:2px;margin:14px 8px 4px}
+
+  .main{padding:26px 30px}
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+  .topbar h2{font-size:20px;letter-spacing:1px}
+  .topbar .who{font-size:12px;color:var(--dim)}
+  .topbar .who b{color:var(--res)}
+  .topbar .role{font-size:9px;padding:3px 8px;border-radius:20px;margin-left:8px;
+    background:rgba(138,155,255,.18);color:var(--res);letter-spacing:1px}
+  .logout{padding:8px 14px;background:var(--danger);color:#fff;font-size:11px;
+    border-radius:8px;margin-left:14px}
+  .refresh{padding:8px 14px;background:var(--bg2);color:var(--res);font-size:11px;
+    border-radius:8px;margin-left:14px;border:1px solid var(--line);letter-spacing:1px}
+  .refresh:hover{background:var(--card);border-color:var(--res)}
+  .refresh.spinning{animation:spin .6s linear}
+  @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .card h3{font-size:12px;color:var(--dim);letter-spacing:2px;margin-bottom:12px}
+  .kpi{font-size:28px;font-weight:700;color:var(--res)}
+  .kpi.warn{color:var(--warn)} .kpi.ok{color:var(--acc)} .kpi.danger{color:var(--danger)}
+
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:22px;margin-top:22px}
+  .panel h3{font-size:13px;letter-spacing:2px;color:var(--res);margin-bottom:16px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+  th{color:var(--dim);font-weight:500;font-size:11px;letter-spacing:1px;text-align:left;
+    padding:10px;border-bottom:1px solid var(--line)}
+  td{padding:11px 10px;border-bottom:1px solid #16202e;vertical-align:top}
+  tr:hover td{background:#0f1727}
+  .badge{padding:3px 9px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:.5px}
+  .on{background:rgba(0,229,160,.15);color:var(--acc)}
+  .off{background:rgba(255,77,109,.15);color:var(--danger)}
+  .exp{background:rgba(255,176,32,.15);color:var(--warn)}
+
+  .mini{padding:6px 11px;font-size:11px;border-radius:8px;margin-right:5px;margin-bottom:4px}
+  .mini.d{background:var(--danger);color:#fff}
+  .mini.e{background:var(--acc);color:#001a12}
+  .mini.b{background:var(--line);color:var(--txt)}
+
+  .toast{position:fixed;bottom:24px;right:24px;background:var(--card);
+    border:1px solid var(--res);color:var(--txt);padding:14px 20px;border-radius:12px;
+    font-size:13px;box-shadow:0 10px 40px rgba(138,155,255,.25);z-index:99;
+    opacity:0;transform:translateY(20px);transition:.3s;max-width:400px}
+  .toast.show{opacity:1;transform:translateY(0)}
+  .toast.err{border-color:var(--danger);box-shadow:0 10px 40px rgba(255,77,109,.2)}
+
+  .note{background:#0f1727;border-left:3px solid var(--warn);padding:8px 12px;
+    border-radius:6px;font-size:12px;color:var(--dim);margin-top:10px}
+  .searchbar{display:flex;gap:10px;margin-bottom:12px}
+  .searchbar input{flex:1}
+  .empty{text-align:center;color:var(--dim);padding:24px;font-size:13px}
+</style>
+</head>
+<body>
+
+<div id="loginView">
+  <div class="loginBox">
+    <div class="logo">RS</div>
+    <h1>HYPERSENSEINDIA</h1>
+    <div class="sub">RESELLER • PANEL</div>
+    <label>EMAIL</label>
+    <input id="lgEmail" type="email" placeholder="reseller@mail.com" />
+    <label>PASSWORD</label>
+    <input id="lgPass" type="password" placeholder="••••••••" />
+    <button class="btn" id="lgBtn">LOGIN</button>
+    <div class="err" id="lgErr"></div>
+    <div class="ok" id="lgOk"></div>
+  </div>
+</div>
+
+<div id="dash" class="hidden">
+  <aside class="side">
+    <div class="brand">
+      <div class="dot">HS</div>
+      <div><b>HYPERSENSEINDIA</b><span>RESELLER</span></div>
+    </div>
+    <nav class="nav" id="navRoot"></nav>
+  </aside>
+  <main class="main">
+    <div class="topbar">
+      <h2 id="pageTitle">Overview</h2>
+      <div style="display:flex;align-items:center">
+        <div class="who">Logged as <b id="whoEmail">—</b>
+          <span class="role" id="whoRid">—</span></div>
+        <button class="refresh" id="refreshBtn">⟳ REFRESH</button>
+        <button class="logout" id="logoutBtn">LOGOUT</button>
+      </div>
+    </div>
+    <div id="tabContent"></div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getDatabase, ref, set as rset, get as rget, update as rupdate,
+         remove as rremove }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAFf_skp9nhvdWHyJy_ICGdW8r01EmGlss",
+  authDomain: "hypersenseauth.firebaseapp.com",
+  projectId: "hypersenseauth",
+  databaseURL: "https://hypersenseauth-default-rtdb.firebaseio.com/",
+  storageBucket: "hypersenseauth.firebasestorage.app",
+  messagingSenderId: "638076403379",
+  appId: "1:638076403379:web:90de28063ab1c19c6fbac6"
+};
+
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const rtdb = getDatabase(app);
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g,
+  c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let toastTimer=null;
+function toast(msg, isErr=false){
+  const t=$("toast"); t.textContent=msg;
+  t.className="toast show"+(isErr?" err":"");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.className="toast",3500);
+}
+async function safeGet(p){
+  try{ const s=await rget(ref(rtdb,p)); return s.exists()?s.val():{}; }
+  catch{ return {}; }
+}
+async function ensureAuth(email, pass){
+  let r=await fetch(
+    `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${firebaseConfig.apiKey}`,
+    {method:"POST",headers:{"Content-Type":"application/json"},
+     body:JSON.stringify({email,password:pass,returnSecureToken:false})});
+  let data=await r.json();
+  if(!data.error) return data.localId;
+  if(data.error.message==="EMAIL_EXISTS"){
+    const r2=await fetch(
+      `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${firebaseConfig.apiKey}`,
+      {method:"POST",headers:{"Content-Type":"application/json"},
+       body:JSON.stringify({email,password:pass,returnSecureToken:false})});
+    const d2=await r2.json();
+    if(d2.error) throw new Error("Account exists but password differs.");
+    return d2.localId;
+  }
+  throw new Error(data.error.message);
+}
+
+let SESSION=null;
+let CURRENT_TAB="r_overview";
+let AUTO_REFRESH_TIMER=null;
+const AUTO_REFRESH_MS = 30000;
+
+/* ===== LOGIN ===== */
+$("lgBtn").onclick = async () => {
+  $("lgErr").textContent=""; $("lgOk").textContent="";
+  const email=$("lgEmail").value.trim().toLowerCase();
+  const pass =$("lgPass").value;
+  if(!email||!pass) return $("lgErr").textContent="Fill both fields.";
+  $("lgBtn").textContent="CHECKING…";
+  try{
+    const cred=await signInWithEmailAndPassword(auth,email,pass);
+    const uid=cred.user.uid;
+
+    const mapSnap=await rget(ref(rtdb,`reseller_map/${uid}`));
+    if(!mapSnap.exists()){
+      await signOut(auth);
+      $("lgErr").textContent="Not a reseller account.";
+      $("lgBtn").textContent="LOGIN"; return;
+    }
+    const rid=mapSnap.val();
+    const rSnap=await rget(ref(rtdb,`resellers/${rid}`));
+    if(!rSnap.exists() || rSnap.val().active===false){
+      await signOut(auth);
+      $("lgErr").textContent="Reseller disabled or missing.";
+      $("lgBtn").textContent="LOGIN"; return;
+    }
+    SESSION={uid,email,resellerId:rid,profile:rSnap.val()||{}};
+    $("loginView").classList.add("hidden");
+    $("dash").classList.remove("hidden");
+    $("whoEmail").textContent=email;
+    $("whoRid").textContent=rid;
+    buildNav(); goto("r_overview");
+    startAutoRefresh();
+  }catch(e){
+    $("lgErr").textContent=(e.code||e.message||"").replace("auth/","");
+    $("lgBtn").textContent="LOGIN";
+  }
+};
+$("lgPass").addEventListener("keydown",e=>e.key==="Enter"&&$("lgBtn").click());
+
+$("logoutBtn").onclick = async () => {
+  stopAutoRefresh();
+  await signOut(auth);
+  location.reload();
+};
+
+$("refreshBtn").onclick = () => {
+  const btn=$("refreshBtn");
+  btn.classList.add("spinning");
+  setTimeout(()=>btn.classList.remove("spinning"),600);
+  RENDER[CURRENT_TAB] && RENDER[CURRENT_TAB]();
+  toast("Refreshed.");
+};
+
+/* ===== AUTO-REFRESH ===== */
+function startAutoRefresh(){
+  stopAutoRefresh();
+  AUTO_REFRESH_TIMER = setInterval(()=>{
+    if(document.hidden || !SESSION) return;
+    RENDER[CURRENT_TAB] && RENDER[CURRENT_TAB]();
+  }, AUTO_REFRESH_MS);
+}
+function stopAutoRefresh(){
+  if(AUTO_REFRESH_TIMER){ clearInterval(AUTO_REFRESH_TIMER); AUTO_REFRESH_TIMER=null; }
+}
+document.addEventListener("visibilitychange",()=>{
+  if(!document.hidden && SESSION){
+    RENDER[CURRENT_TAB] && RENDER[CURRENT_TAB]();
+  }
+});
+
+/* ===== NAV ===== */
+const NAV=[
+  { section:"MAIN" },
+  { id:"r_overview", label:"◈ Overview" },
+  { section:"MY WORK" },
+  { id:"r_create",   label:"◈ Create User" },
+  { id:"r_users",    label:"◈ My Users" },
+  { section:"ACCOUNT" },
+  { id:"r_profile",  label:"◈ My Profile" }
+];
+function buildNav(){
+  const root=$("navRoot"); root.innerHTML="";
+  NAV.forEach(it=>{
+    if(it.section){
+      const s=document.createElement("div");
+      s.className="section"; s.textContent=it.section; root.appendChild(s);
+    } else {
+      const a=document.createElement("a");
+      a.dataset.tab=it.id; a.textContent=it.label;
+      a.onclick=()=>goto(it.id); root.appendChild(a);
+    }
+  });
+}
+function goto(id){
+  CURRENT_TAB=id;
+  document.querySelectorAll(".nav a").forEach(x=>
+    x.classList.toggle("active", x.dataset.tab===id));
+  $("pageTitle").textContent =
+    document.querySelector(`.nav a[data-tab="${id}"]`)?.textContent
+      .replace("◈","").trim() || id;
+  $("tabContent").innerHTML=`<div class="panel"><h3>LOADING…</h3></div>`;
+  (RENDER[id] || (()=> $("tabContent").innerHTML=
+    `<div class="panel"><h3>NOT FOUND</h3></div>`))();
+}
+
+/* ===== RENDER ===== */
+const RENDER={};
+
+/* ---------- OVERVIEW ---------- */
+RENDER.r_overview = async () => {
+  const users=await safeGet("users");
+  const mine=Object.values(users).filter(u=>u.reseller_id===SESSION.resellerId);
+  let active=0,expired=0,lifetime=0,hwid=0;
+  mine.forEach(u=>{
+    const isLife=u.lifetime===true;
+    const isExp=u.expires_at && !isLife && new Date(u.expires_at)<new Date();
+    if(isLife) lifetime++;
+    if(isLife || !isExp) active++; else expired++;
+    if(u.hwid) hwid++;
+  });
+  // Refresh own profile permissions
+  try{
+    const snap=await rget(ref(rtdb,`resellers/${SESSION.resellerId}`));
+    SESSION.profile = snap.exists() ? snap.val() : {};
+  }catch{}
+  const r=SESSION.profile||{};
+  $("tabContent").innerHTML=`
+    <div class="grid">
+      <div class="card"><h3>MY USERS</h3><div class="kpi">${mine.length}</div></div>
+      <div class="card"><h3>ACTIVE</h3><div class="kpi ok">${active}</div></div>
+      <div class="card"><h3>EXPIRED</h3><div class="kpi danger">${expired}</div></div>
+      <div class="card"><h3>LIFETIME</h3><div class="kpi warn">${lifetime}</div></div>
+      <div class="card"><h3>HWID LOCKED</h3><div class="kpi warn">${hwid}</div></div>
+    </div>
+    <div class="panel">
+      <h3>MY INFO</h3>
+      <div class="row">
+        <div><label>NAME</label><input readonly value="${esc(r.name||"—")}"/></div>
+        <div><label>RESELLER ID</label><input readonly value="${esc(SESSION.resellerId)}"/></div>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <div><label>RESET HWID PERMISSION</label>
+          <input readonly value="${r.can_reset_hwid?'ENABLED':'DISABLED'}"/></div>
+        <div><label>DELETE USERS PERMISSION</label>
+          <input readonly value="${r.can_delete_users?'ENABLED':'DISABLED'}"/></div>
+      </div>
+      <div class="note">Auto-refresh every 30s. Last update: ${new Date().toLocaleTimeString()}</div>
+    </div>`;
+};
+
+/* ---------- CREATE USER ---------- */
+RENDER.r_create = async () => {
+  $("tabContent").innerHTML=`
+    <div class="panel">
+      <h3>CREATE NEW USER</h3>
+      <div class="row">
+        <div><label>EMAIL</label><input id="cuEmail" placeholder="user@mail.com"/></div>
+        <div><label>PASSWORD</label><input id="cuPass" placeholder="min 6 chars"/></div>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <div><label>PHONE (optional)</label><input id="cuPhone" placeholder="+91…"/></div>
+        <div><label>DISCORD ID (optional)</label>
+          <input id="cuDiscord" placeholder="user#0000 or ID"/></div>
+      </div>
+      <div class="row3" style="margin-top:14px">
+        <div><label>DAYS VALID</label>
+          <input id="cuDays" type="number" value="30" min="1"/></div>
+        <div><label>LIFETIME?</label>
+          <select id="cuLifetime">
+            <option value="no">No (Timed)</option>
+            <option value="yes">Yes (Lifetime)</option>
+          </select></div>
+        <div></div>
+      </div>
+      <div style="margin-top:14px">
+        <label>NOTE (optional)</label>
+        <textarea id="cuNote" placeholder="Private note about this user (you & admin see it)…"></textarea>
+      </div>
+      <button class="btn" style="width:240px" id="cuBtn">CREATE USER</button>
+      <div class="err" id="cuErr"></div>
+    </div>`;
+
+  $("cuBtn").onclick = async () => {
+    $("cuErr").textContent="";
+    const email=$("cuEmail").value.trim();
+    const pass =$("cuPass").value;
+    const phone=$("cuPhone").value.trim();
+    const dc   =$("cuDiscord").value.trim();
+    const days =parseInt($("cuDays").value||"30");
+    const life =$("cuLifetime").value==="yes";
+    const note =$("cuNote").value.trim();
+    if(!email || pass.length<6)
+      return $("cuErr").textContent="Email + 6-char password required.";
+    try{
+      const uid=await ensureAuth(email,pass);
+      const expires=life?null:new Date(Date.now()+days*86400000).toISOString();
+      await rset(ref(rtdb,`users/${uid}`),{
+        email, admin:false,
+        lifetime:life, expires_at:expires,
+        hwid:null, phone:phone||null,
+        discord_id:dc||null, discord_verified:false,
+        note:note||null,
+        reseller_id:SESSION.resellerId,
+        created_by:SESSION.uid,
+        created_at:Date.now()
+      });
+      toast("User created ✔");
+      $("cuEmail").value=""; $("cuPass").value="";
+      $("cuPhone").value=""; $("cuDiscord").value=""; $("cuNote").value="";
+    }catch(e){ $("cuErr").textContent=e.message; }
+  };
+};
+
+/* ---------- MY USERS ---------- */
+RENDER.r_users = async () => {
+  $("tabContent").innerHTML=`
+    <div class="panel">
+      <h3>MY USERS</h3>
+      <div class="searchbar">
+        <input id="ruSearch" placeholder="Search email / discord / note…"/>
+        <select id="ruFilter" style="max-width:180px">
+          <option value="all">All</option>
+          <option value="active">Active</option>
+          <option value="expired">Expired</option>
+          <option value="lifetime">Lifetime</option>
+        </select>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr>
+            <th>EMAIL</th><th>EXPIRES</th><th>HWID</th><th>DISCORD</th>
+            <th>NOTE</th><th>STATUS</th><th>ACTIONS</th>
+          </tr></thead>
+          <tbody id="ruBody"></tbody>
+        </table>
+      </div>
+    </div>`;
+
+  const users=await safeGet("users");
+  const rows=Object.entries(users).map(([uid,u])=>({uid,...u}))
+    .filter(u=>u.reseller_id===SESSION.resellerId);
+
+  let canReset=false, canDel=false;
+  try{
+    const snap=await rget(ref(rtdb,`resellers/${SESSION.resellerId}`));
+    const r = snap.exists()?snap.val():{};
+    canReset = r.can_reset_hwid===true;
+    canDel   = r.can_delete_users===true;
+    SESSION.profile=r;
+  }catch{}
+
+  function render(){
+    const q=($("ruSearch").value||"").toLowerCase();
+    const f=$("ruFilter").value;
+    const tb=$("ruBody"); tb.innerHTML="";
+    const list = rows.filter(u=>{
+      const isLife=u.lifetime===true;
+      const isExp=u.expires_at && !isLife && new Date(u.expires_at)<new Date();
+      if(f==="active" && isExp) return false;
+      if(f==="expired" && !isExp) return false;
+      if(f==="lifetime" && !isLife) return false;
+      if(!q) return true;
+      const blob=[u.email,u.discord_id,u.hwid,u.note].filter(Boolean)
+        .join(" ").toLowerCase();
+      return blob.includes(q);
+    });
+    if(!list.length){
+      tb.innerHTML=`<tr><td colspan="7" class="empty">No users yet.</td></tr>`;
+      return;
+    }
+    list.forEach(u=>{
+      const isLife=u.lifetime===true;
+      const exp=u.expires_at?new Date(u.expires_at):null;
+      const isExp=exp && !isLife && exp<new Date();
+      const tr=document.createElement("tr");
+      tr.innerHTML=`
+        <td>${esc(u.email||"—")}</td>
+        <td>${isLife?'<span class="badge on">LIFETIME</span>':
+              esc(exp?exp.toLocaleDateString():"—")}</td>
+        <td style="font-size:11px">${u.hwid?esc(u.hwid.substring(0,14))+"…":"—"}</td>
+        <td style="font-size:11px">${esc(u.discord_id||"—")}</td>
+        <td style="font-size:11px;max-width:200px;color:var(--warn)">
+          ${u.note?esc(u.note):'<span style="color:var(--dim)">—</span>'}
+        </td>
+        <td>${isExp?'<span class="badge off">EXPIRED</span>':'<span class="badge on">ACTIVE</span>'}</td>
+        <td>
+          <button class="mini b" data-a="note" data-uid="${u.uid}">NOTE</button>
+          ${canReset?`<button class="mini e" data-a="reset" data-uid="${u.uid}">RESET HWID</button>`:""}
+          ${canDel?`<button class="mini d" data-a="del" data-uid="${u.uid}">DELETE</button>`:""}
+        </td>`;
+      tb.appendChild(tr);
+    });
+    tb.querySelectorAll("[data-a]").forEach(b=>{
+      b.onclick=()=>userAction(b.dataset.a,b.dataset.uid);
+    });
+  }
+  $("ruSearch").addEventListener("input",render);
+  $("ruFilter").addEventListener("change",render);
+  render();
+
+  async function userAction(act,uid){
+    const u=rows.find(x=>x.uid===uid);
+    try{
+      if(act==="note"){
+        const v=prompt("Note for this user:",u?.note||"");
+        if(v===null) return;
+        await rupdate(ref(rtdb,`users/${uid}`),{note:v.trim()||null});
+        toast("Note updated.");
+      } else if(act==="reset"){
+        if(!canReset) return toast("No permission to reset HWID.",true);
+        await rupdate(ref(rtdb,`users/${uid}`),{hwid:null,last_seen:null});
+        toast("HWID reset.");
+      } else if(act==="del"){
+        if(!canDel) return toast("No permission to delete users.",true);
+        if(!confirm("Delete this user record?")) return;
+        await rremove(ref(rtdb,`users/${uid}`));
+        toast("Deleted.");
+      }
+      RENDER.r_users();
+    }catch(e){ toast(e.message,true); }
+  }
+};
+
+/* ---------- PROFILE ---------- */
+RENDER.r_profile = async () => {
+  // refresh from server
+  try{
+    const snap=await rget(ref(rtdb,`resellers/${SESSION.resellerId}`));
+    SESSION.profile = snap.exists() ? snap.val() : {};
+  }catch{}
+  const r=SESSION.profile||{};
+  $("tabContent").innerHTML=`
+    <div class="panel">
+      <h3>MY PROFILE</h3>
+      <div class="row">
+        <div><label>EMAIL</label><input readonly value="${esc(SESSION.email)}"/></div>
+        <div><label>RESELLER ID</label><input readonly value="${esc(SESSION.resellerId)}"/></div>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <div><label>DISPLAY NAME</label><input id="rpName" value="${esc(r.name||'')}"/></div>
+        <div><label>PHONE</label><input id="rpPhone" value="${esc(r.phone||'')}"/></div>
+      </div>
+      <label style="margin-top:14px">DISCORD / CONTACT</label>
+      <input id="rpDiscord" value="${esc(r.discord||'')}"/>
+      <button class="btn" style="width:220px" id="rpSave">SAVE</button>
+      <div class="err" id="rpErr"></div>
+      <div class="note">Contact admin to change email, password, or active status.
+        Permission flags (reset HWID / delete users) are also managed by admin.</div>
+    </div>`;
+  $("rpSave").onclick=async()=>{
+    try{
+      await rupdate(ref(rtdb,`resellers/${SESSION.resellerId}`),{
+        name:$("rpName").value.trim(),
+        phone:$("rpPhone").value.trim(),
+        discord:$("rpDiscord").value.trim()
+      });
+      SESSION.profile.name=$("rpName").value.trim();
+      SESSION.profile.phone=$("rpPhone").value.trim();
+      SESSION.profile.discord=$("rpDiscord").value.trim();
+      toast("Saved.");
+    }catch(e){ $("rpErr").textContent=e.message; }
+  };
+};
+</script>
+</body>
+</html>
